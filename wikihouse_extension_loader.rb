@@ -54,8 +54,8 @@ module WikihouseExtension
   wikihouse_sheet_height = 1200.mm
   wikihouse_sheet_width = 2400.mm
   wikihouse_sheet_depth = 18.mm
-  wihihouse_panel_padding = 25.mm / 2
-  wikihouse_sheet_margin = 15.mm - wihihouse_panel_padding
+  wikihouse_panel_padding = 25.mm / 2
+  wikihouse_sheet_margin = 15.mm - wikihouse_panel_padding
   wikihouse_font_height = 30.mm
   wikihouse_sheet_inner_height = wikihouse_sheet_height - (2 * wikihouse_sheet_margin)
   wikihouse_sheet_inner_width = wikihouse_sheet_width - (2 * wikihouse_sheet_margin)
@@ -69,7 +69,7 @@ module WikihouseExtension
   "sheet_width"  => wikihouse_sheet_width, 
   "sheet_inner_width"  => wikihouse_sheet_inner_width,
   "sheet_depth" => wikihouse_sheet_depth, 
-  "padding"      => wihihouse_panel_padding,
+  "padding"      => wikihouse_panel_padding,
   "margin"       => wikihouse_sheet_margin,
   "font_height"  => wikihouse_font_height,
   }

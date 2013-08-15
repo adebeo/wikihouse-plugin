@@ -23,7 +23,7 @@ function recieve_wikihouse_settings(args) {
 	  "sheet_inner_height"  => wikihouse_sheet_inner_height,
 	  "sheet_width"         => wikihouse_sheet_width, 
 	  "sheet_inner_width"   => wikihouse_sheet_inner_width, 
-	  "padding"             => wihihouse_panel_padding,
+	  "padding"             => wikihouse_panel_padding,
 	  "margin"              => wikihouse_sheet_margin,
 	  "font_height"         => wikihouse_font_height,
 	  }

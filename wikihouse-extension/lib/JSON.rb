@@ -1,4 +1,4 @@
-# JSON formatter for parsing Ruby hases and Arrays to JavaScript as
+# JSON formatter for parsing Ruby hashes and Arrays to JavaScript as
 # json objects.
 #
 # Original Author: Aerilius
@@ -11,7 +11,6 @@ module WikihouseExtension
   
     # Redefined JSON to a class instead of a module as this seems to through 
     # a load error otherwise (things run fine though).
-#    module_function() # Allows Methods to be callable from module 
     
     def self.from_json(json_string)
       # split at every even number of unescaped quotes; if it's not a string then replace : and null

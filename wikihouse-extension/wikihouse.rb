@@ -8,6 +8,7 @@
 lib_path = File.join(File.dirname(__FILE__), 'lib')
 
 require 'sketchup.rb'
+Sketchup::require File.join(lib_path, 'core.rb')
 require_all(lib_path)
 
 

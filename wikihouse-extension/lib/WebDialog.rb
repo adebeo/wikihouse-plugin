@@ -387,7 +387,7 @@ module WikihouseExtension
     # Initialise an attribute dictionary for custom metadata.
     attr = model.attribute_dictionary WIKIHOUSE_TITLE, true
     if attr.size == 0
-      attr["spec"] = WIKIHOUSE_EXTENSION.version
+      attr["spec"] = EXTENSION.version
     end
   
     # Exit if it's an unsaved model.

@@ -36,5 +36,10 @@
 -->
 
 </body>
+<script type="text/javascript">
+	// Work around OSX issue with body.onload where window appear blank.
+	// On later cleanup ths would be better replaced with jQuery 'ready' event.
+	fetch_settings('current');
+</script>
 </html>
 

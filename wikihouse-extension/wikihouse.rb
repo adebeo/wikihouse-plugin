@@ -5,23 +5,10 @@
 # WikiHouse SketchUp Plugin
 # =========================
 
+lib_path = File.join(File.dirname(__FILE__), 'lib')
+
 require 'sketchup.rb'
-
-# ------------------
-# Update Path Arrays
-# ------------------
-
-# Using regular require statments don't seem to work with the embedded Ruby in SketchUp
-# unless the full path of files is included in the $LOAD_PATH array 
-
-# Add current working directory to $LOAD_PATH array 
-cwd = File.expand_path(File.dirname(__FILE__))
-$LOAD_PATH.unshift(cwd) unless $LOAD_PATH.include?(cwd)
-
-# Add all files in the lib directory to the $LOAD_PATH array
-abs_lib_path = File.join(File.expand_path(File.dirname(__FILE__)), "lib")
-$LOAD_PATH.unshift(abs_lib_path) unless $LOAD_PATH.include?(abs_lib_path)
-require_all(abs_lib_path)
+require_all(lib_path)
 
 
 module WikihouseExtension # Top Level Namespace

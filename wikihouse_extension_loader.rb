@@ -1,13 +1,9 @@
 # Create an entry in the Extension list that loads the wikihouse.rb scripts
 
+lib_path = File.join(File.dirname(__FILE__), 'wikihouse-extension', 'lib')
+
 require 'extensions.rb'
-
-# Add all files in the lib directory to the $LOAD_PATH array
-abs_lib_path = File.join(File.expand_path(File.dirname(__FILE__)), "/wikihouse-extension/lib")
-$LOAD_PATH.unshift(abs_lib_path) unless $LOAD_PATH.include?(abs_lib_path)
-
-require 'utils.rb'
-require 'JSON.rb'
+require File.join(lib_path, 'utils.rb')
 
 module WikihouseExtension
 
@@ -19,7 +15,7 @@ module WikihouseExtension
 
   # Some Global Constants
   WIKIHOUSE_TITLE = 'Wikihouse' # name of Wikihouse project, incase it changes.
-  # Pannel stuff
+  # Panel stuff
   PANEL_ID_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   PANEL_ID_ALPHABET_LENGTH = PANEL_ID_ALPHABET.length
   
@@ -29,6 +25,8 @@ module WikihouseExtension
   else
     WIKIHOUSE_SERVER = "http://wikihouse-cc.appspot.com"
   end
+
+  LIB_PATH = File.join(File.dirname(__FILE__), 'wikihouse-extension', 'lib')
   
   WIKIHOUSE_DOWNLOAD_PATH = "/library/sketchup"
   WIKIHOUSE_UPLOAD_PATH = "/library/designs/add/sketchup"
@@ -92,8 +90,9 @@ module WikihouseExtension
 #    $wikihouse_settings = settings
 #  end
   
+  loader = File.join(File.dirname(__FILE__), 'wikihouse-extension', 'wikihouse.rb')
   # Define and Load the wikihouse Extension 
-  WIKIHOUSE_EXTENSION = SketchupExtension.new "Wikihouse Plugin Development Version", "wikihouse-extension/wikihouse.rb"
+  WIKIHOUSE_EXTENSION = SketchupExtension.new('Wikihouse Plugin Development Version', loader)
   WIKIHOUSE_EXTENSION.version = ' 0.2 Dev'
   WIKIHOUSE_EXTENSION.description = "Allows for the sharing and downloading of wikihouse models at http://www.wikihouse.cc/, as well as the traslation of models to cutting templates."
   WIKIHOUSE_EXTENSION.creator = " Wikihouse Development Team"

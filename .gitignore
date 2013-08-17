@@ -1,3 +1,4 @@
 # Ruby Extension Files #
 ########################
 *.rbz
+*.DS_Store

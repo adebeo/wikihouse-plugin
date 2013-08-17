@@ -507,8 +507,8 @@ module WikihouseExtension
       d.close }
 
     # Set HTML
-    html_path = Sketchup.find_support_file "settings.html", "Plugins/wikihouse-extension/lib/"
-    dialog.set_file html_path
+    html_path = File.join(LIB_PATH, 'settings.html')
+    dialog.set_file(html_path)
     dialog.show_modal
     #    dialog.bring_to_front
     #    dialog.show

@@ -61,7 +61,7 @@ module WikihouseExtension
   #(Chris) Plan to eventually store all setting as a hash. 
   
   # Store the actual values as length objects (in inches)
-  $wikihouse_settings = {
+  @settings = {
   "sheet_height" => wikihouse_sheet_height,
   "sheet_inner_height" => wikihouse_sheet_inner_height,
   "sheet_width"  => wikihouse_sheet_width, 
@@ -73,22 +73,14 @@ module WikihouseExtension
   }
   
   # Store default values for recall
-  DEFAULT_SETTINGS = Hash[$wikihouse_settings]
+  DEFAULT_SETTINGS = Hash[@settings]
   
-# NEEDED IF SETTINGS IS A MODULE/CLASS VARIABLE (currently made it global)
-#   Note: module variable @@wikihouse_settings is accessable in WikihouseExtension namespace
-#   e.g. X = @@wikihouse_settings["sheet_height"] but not in any subclasses. 
-#   Therefore use get methods so they can be returned via referencing the module 
-#      e.g. settings = WikihouseExtension.settings
-#      e.g. X = settings["sheet_height"]
-#   Or all at once: 
-#      e.g. X = WikihouseExtension.settings["sheet_height"].
-#  def self.settings
-#    $wikihouse_settings
-#  end
-#  def self.settings=(settings)
-#    $wikihouse_settings = settings
-#  end
+  def self.settings
+   @settings
+  end
+  def self.settings=(settings)
+   @settings = settings
+  end
   
   loader = File.join(File.dirname(__FILE__), 'wikihouse-extension', 'wikihouse.rb')
   # Define and Load the wikihouse Extension 

@@ -59,8 +59,8 @@ module WikihouseExtension
 
     # TODO(tav): Ensure that this is atomic and free of thread-related
     # concurrency issues.
-    $WIKIHOUSE_DOWNLOADS_ID += 1
-    download_id = $WIKIHOUSE_DOWNLOADS_ID.to_s
+    WikihouseExtension.downloads_id += 1
+    download_id = WikihouseExtension.downloads_id.to_s
 
     WIKIHOUSE_DOWNLOADS[download_id] = filename
 
@@ -463,7 +463,7 @@ module WikihouseExtension
 
         # Convert Dimenstions to mm
         dims = {}
-        for k, v in $wikihouse_settings do
+        for k, v in WikihouseExtension.settings do
           dims[k] = v.to_mm
         end
         script = "recieve_wikihouse_settings('" + JSON.to_json(dims) + "');"
@@ -481,17 +481,17 @@ module WikihouseExtension
       end
 
       #      UI.messagebox("Passed Arguments = #{args}")
-
+      settings = WikihouseExtension.settings
       new_settings = JSON.from_json(args)
 
       for k,v in new_settings do
         # Convert mm back to inches
-        $wikihouse_settings[k] = v.mm
+        settings[k] = v.mm
       end
 
       # Recalculate inner heights and widths
-      $wikihouse_settings["sheet_inner_height"] = $wikihouse_settings["sheet_height"] - (2 * $wikihouse_settings["margin"])
-      $wikihouse_settings["sheet_inner_width"] = $wikihouse_settings["sheet_width"] - (2 * $wikihouse_settings["margin"])
+      settings["sheet_inner_height"] = settings["sheet_height"] - (2 * settings["margin"])
+      settings["sheet_inner_width"] = settings["sheet_width"] - (2 * settings["margin"])
 
       puts "Dimensions Updated!"
 

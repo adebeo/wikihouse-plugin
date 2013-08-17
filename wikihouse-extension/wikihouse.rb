@@ -767,10 +767,10 @@ module WikihouseExtension # Top Level Namespace
   
     def initialize(entities, root, dimensions)
   
-      $count_s1 = 0
-      $count_s2 = 0
-      $count_s3 = 0
-      $count_s4 = 0
+      @count_s1 = 0
+      @count_s2 = 0
+      @count_s3 = 0
+      @count_s4 = 0
   
       # Initialise the default attribute values.
       @faces = Hash.new
@@ -864,10 +864,10 @@ module WikihouseExtension # Top Level Namespace
       end
   
       puts "Items: #{total}"
-      puts "S1: #{$count_s1}"
-      puts "S2: #{$count_s2}"
-      puts "S3: #{$count_s3}"
-      puts "S4: #{$count_s4}"
+      puts "S1: #{@count_s1}"
+      puts "S2: #{@count_s2}"
+      puts "S3: #{@count_s3}"
+      puts "S4: #{@count_s4}"
       
     end
   
@@ -879,8 +879,8 @@ module WikihouseExtension # Top Level Namespace
       groups = @groups
   
       # Setup the min/max heights for the depth edge/faces.
-      min_height = $wikihouse_settings["sheet_depth"] - 1.mm
-      max_height = $wikihouse_settings["sheet_depth"] + 1.mm
+      min_height = WikihouseExtension.settings["sheet_depth"] - 1.mm
+      max_height = WikihouseExtension.settings["sheet_depth"] + 1.mm
 #      min_height = 17.mm
 #      max_height = 19.mm
   
@@ -1008,7 +1008,7 @@ module WikihouseExtension # Top Level Namespace
           area2 = face2.area transform
           diff = (area2 - area1).abs
           if diff < 0.5 # TODO(tav): Ideally, this tolerance will be 0.1 or less.
-            $count_s1 += 1
+            @count_s1 += 1
             # Ensure that the faces don't intersect, i.e. are parallel to each
             # other.
             intersect = Geom.intersect_plane_plane face1.plane, face2.plane
@@ -1023,7 +1023,7 @@ module WikihouseExtension # Top Level Namespace
               end
             end
             if not intersect
-              $count_s2 += 1
+              @count_s2 += 1
               vertices1 = face1.vertices
               vertices2 = face2.vertices
               vertices_length = vertices1.length
@@ -1047,7 +1047,7 @@ module WikihouseExtension # Top Level Namespace
                 end
               end
               if connected
-                $count_s3 += 1
+                @count_s3 += 1
                 # Go through the various loops of edges and find ones that have
                 # shared edges to the other face.
                 loops1 = []
@@ -1169,23 +1169,24 @@ module WikihouseExtension # Top Level Namespace
       entities = selection
     end
   
+    settings = WikihouseExtension.settings
     dimensions = [
-              $wikihouse_settings["sheet_height"],
-              $wikihouse_settings["sheet_width"],
-              $wikihouse_settings["sheet_inner_height"],
-              $wikihouse_settings["sheet_inner_width"],
-              $wikihouse_settings["margin"],
-              $wikihouse_settings["padding"],
-              $wikihouse_settings["font_height"]
-                ]
+      settings['sheet_height'],
+      settings['sheet_width'],
+      settings['sheet_inner_height'],
+      settings['sheet_inner_width'],
+      settings['margin'],
+      settings['padding'],
+      settings['font_height']
+    ]
   
     # Load and parse the entities.
-    if WIKIHOUSE_SHORT_CIRCUIT and $wikloader
-      loader = $wikloader
+    if WIKIHOUSE_SHORT_CIRCUIT && @@wikloader # Converted from global. Could be instance?
+      loader = @@wikloader
     else
       loader = WikiHouseEntities.new entities, root, dimensions
       if WIKIHOUSE_SHORT_CIRCUIT
-        $wikloader = loader
+        @@wikloader = loader
       end
     end
   
@@ -1219,130 +1220,127 @@ module WikihouseExtension # Top Level Namespace
     [svg_data, dxf_data]
   
   end
-  
-end
 
-# ------------------------------------------------------------------------------
-# Set Globals
-# ------------------------------------------------------------------------------
-# This section is run only once and sets up the Extension menu items and tool buttons.
-# It in not part of module named WIkihouseExtension, so methods etc. must be referenced with 
-# WikihouseExtension::name, where name is the name of the method, constant or class.
 
-if not file_loaded? __FILE__
+  unless file_loaded?(__FILE__)
 
-  WIKIHOUSE_ASSETS = File.join File.dirname(__FILE__), "wikihouse-assets"
+    WIKIHOUSE_ASSETS = File.join(File.dirname(__FILE__), 'wikihouse-assets')
 
-  # Initialise the data containers.
-  WIKIHOUSE_DOWNLOADS = Hash.new
-  WIKIHOUSE_UPLOADS = Hash.new
+    # Initialise the data containers.
+    WIKIHOUSE_DOWNLOADS = Hash.new
+    WIKIHOUSE_UPLOADS = Hash.new
 
-  # Initialise the downloads counter.
-  $WIKIHOUSE_DOWNLOADS_ID = 0
-
-  # Initialise the core commands.
-  WIKIHOUSE_DOWNLOAD = UI::Command.new "Get Models..." do
-    WikihouseExtension::load_wikihouse_download
-  end
-  
-  WIKIHOUSE_DOWNLOAD.tooltip = "Find new models to use at #{WikihouseExtension::WIKIHOUSE_TITLE}"
-  WIKIHOUSE_DOWNLOAD.small_icon = File.join WIKIHOUSE_ASSETS, "download-16.png"
-  WIKIHOUSE_DOWNLOAD.large_icon = File.join WIKIHOUSE_ASSETS, "download.png"
-
-  # TODO(tav): Irregardless of these procs, all commands seem to get greyed out
-  # when no models are open -- at least, on OS X.
-  WIKIHOUSE_DOWNLOAD.set_validation_proc {
-    MF_ENABLED
-  }
-
-  WIKIHOUSE_MAKE = UI::Command.new "Make This House..." do
-    WikihouseExtension::load_wikihouse_make
-  end
-
-  WIKIHOUSE_MAKE.tooltip = "Convert a model of a House into printable components"
-  WIKIHOUSE_MAKE.small_icon = File.join WIKIHOUSE_ASSETS, "make-16.png"
-  WIKIHOUSE_MAKE.large_icon = File.join WIKIHOUSE_ASSETS, "make.png"
-  WIKIHOUSE_MAKE.set_validation_proc {
-    if Sketchup.active_model
-      MF_ENABLED
-    else
-      MF_DISABLED|MF_GRAYED
+    # Initialise the downloads counter.
+    @downloads_id = 0
+    class << self
+      attr_accessor :downloads_id
     end
-  }
-  
-  WIKIHOUSE_UPLOAD = UI::Command.new "Share Model..." do
-    WikihouseExtension::load_wikihouse_upload
-  end
 
-  WIKIHOUSE_UPLOAD.tooltip = "Upload and share your model at #{WikihouseExtension::WIKIHOUSE_TITLE}"
-  WIKIHOUSE_UPLOAD.small_icon = File.join WIKIHOUSE_ASSETS, "upload-16.png"
-  WIKIHOUSE_UPLOAD.large_icon = File.join WIKIHOUSE_ASSETS, "upload.png"
-  WIKIHOUSE_UPLOAD.set_validation_proc {
-    if Sketchup.active_model
-      MF_ENABLED
-    else
-      MF_DISABLED|MF_GRAYED
+    # Initialise the core commands.
+    WIKIHOUSE_DOWNLOAD = UI::Command.new "Get Models..." do
+      WikihouseExtension::load_wikihouse_download
     end
-  }
-  
-  WIKIHOUSE_SETTINGS = UI::Command.new "Settings..." do
-  WikihouseExtension::load_wikihouse_settings
-  end
+    
+    WIKIHOUSE_DOWNLOAD.tooltip = "Find new models to use at #{WikihouseExtension::WIKIHOUSE_TITLE}"
+    WIKIHOUSE_DOWNLOAD.small_icon = File.join WIKIHOUSE_ASSETS, "download-16.png"
+    WIKIHOUSE_DOWNLOAD.large_icon = File.join WIKIHOUSE_ASSETS, "download.png"
 
-  WIKIHOUSE_SETTINGS.tooltip = "Change #{WikihouseExtension::WIKIHOUSE_TITLE} settings"
-  WIKIHOUSE_SETTINGS.small_icon = File.join WIKIHOUSE_ASSETS, "cog-16.png"
-  WIKIHOUSE_SETTINGS.large_icon = File.join WIKIHOUSE_ASSETS, "cog.png"
-  WIKIHOUSE_SETTINGS.set_validation_proc {
-    MF_ENABLED
+    # TODO(tav): Irregardless of these procs, all commands seem to get greyed out
+    # when no models are open -- at least, on OS X.
+    WIKIHOUSE_DOWNLOAD.set_validation_proc {
+      MF_ENABLED
     }
-  
 
-  # Register a new toolbar with the commands.
-  WIKIHOUSE_TOOLBAR = UI::Toolbar.new WikihouseExtension::WIKIHOUSE_TITLE
-  WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_DOWNLOAD
-  WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_UPLOAD
-  WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_MAKE
-  WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_SETTINGS
-  WIKIHOUSE_TOOLBAR.show
+    WIKIHOUSE_MAKE = UI::Command.new "Make This House..." do
+      WikihouseExtension::load_wikihouse_make
+    end
 
-  # Register a new submenu of the standard Plugins menu with the commands.
-  WIKIHOUSE_MENU = UI.menu("Plugins").add_submenu WikihouseExtension::WIKIHOUSE_TITLE
-  WIKIHOUSE_MENU.add_item WIKIHOUSE_DOWNLOAD
-  WIKIHOUSE_MENU.add_item WIKIHOUSE_UPLOAD
-  WIKIHOUSE_MENU.add_item WIKIHOUSE_MAKE
-  WIKIHOUSE_MENU.add_item WIKIHOUSE_SETTINGS
-
-  # Add our custom AppObserver.
-  Sketchup.add_observer WikihouseExtension::WikiHouseAppObserver.new
-
-  # Display the Ruby Console in dev mode.
-  if WikihouseExtension::WIKIHOUSE_DEV
-    Sketchup.send_action "showRubyPanel:"
+    WIKIHOUSE_MAKE.tooltip = "Convert a model of a House into printable components"
+    WIKIHOUSE_MAKE.small_icon = File.join WIKIHOUSE_ASSETS, "make-16.png"
+    WIKIHOUSE_MAKE.large_icon = File.join WIKIHOUSE_ASSETS, "make.png"
+    WIKIHOUSE_MAKE.set_validation_proc {
+      if Sketchup.active_model
+        MF_ENABLED
+      else
+        MF_DISABLED|MF_GRAYED
+      end
+    }
     
-    WE = WikihouseExtension
-    
-    def w
-      load "wikihouse.rb"
+    WIKIHOUSE_UPLOAD = UI::Command.new "Share Model..." do
+      WikihouseExtension::load_wikihouse_upload
     end
-    puts ""
-    puts "#{WikihouseExtension::WIKIHOUSE_TITLE} Extension Successfully Loaded."
-    puts ""
-    
-    # Interactive utilities
-    def mod
-      return Sketchup.active_model # Open model
-    end
-    def ent
-      return Sketchup.active_model.entities # All entities in model
-    end
-    def sel 
-      return Sketchup.active_model.selection # Current selection
-    end
-  end
 
-  file_loaded __FILE__
+    WIKIHOUSE_UPLOAD.tooltip = "Upload and share your model at #{WikihouseExtension::WIKIHOUSE_TITLE}"
+    WIKIHOUSE_UPLOAD.small_icon = File.join WIKIHOUSE_ASSETS, "upload-16.png"
+    WIKIHOUSE_UPLOAD.large_icon = File.join WIKIHOUSE_ASSETS, "upload.png"
+    WIKIHOUSE_UPLOAD.set_validation_proc {
+      if Sketchup.active_model
+        MF_ENABLED
+      else
+        MF_DISABLED|MF_GRAYED
+      end
+    }
+    
+    WIKIHOUSE_SETTINGS = UI::Command.new "Settings..." do
+    WikihouseExtension::load_wikihouse_settings
+    end
 
-end
+    WIKIHOUSE_SETTINGS.tooltip = "Change #{WikihouseExtension::WIKIHOUSE_TITLE} settings"
+    WIKIHOUSE_SETTINGS.small_icon = File.join WIKIHOUSE_ASSETS, "cog-16.png"
+    WIKIHOUSE_SETTINGS.large_icon = File.join WIKIHOUSE_ASSETS, "cog.png"
+    WIKIHOUSE_SETTINGS.set_validation_proc {
+      MF_ENABLED
+      }
+    
+
+    # Register a new toolbar with the commands.
+    WIKIHOUSE_TOOLBAR = UI::Toolbar.new WikihouseExtension::WIKIHOUSE_TITLE
+    WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_DOWNLOAD
+    WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_UPLOAD
+    WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_MAKE
+    WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_SETTINGS
+    WIKIHOUSE_TOOLBAR.show
+
+    # Register a new submenu of the standard Plugins menu with the commands.
+    WIKIHOUSE_MENU = UI.menu("Plugins").add_submenu WikihouseExtension::WIKIHOUSE_TITLE
+    WIKIHOUSE_MENU.add_item WIKIHOUSE_DOWNLOAD
+    WIKIHOUSE_MENU.add_item WIKIHOUSE_UPLOAD
+    WIKIHOUSE_MENU.add_item WIKIHOUSE_MAKE
+    WIKIHOUSE_MENU.add_item WIKIHOUSE_SETTINGS
+
+    # Add our custom AppObserver.
+    Sketchup.add_observer WikihouseExtension::WikiHouseAppObserver.new
+
+    # Display the Ruby Console in dev mode.
+    if WikihouseExtension::WIKIHOUSE_DEV
+      Sketchup.send_action "showRubyPanel:"
+      
+      WE = WikihouseExtension
+      
+      def w
+        load "wikihouse.rb"
+      end
+      puts ""
+      puts "#{WikihouseExtension::WIKIHOUSE_TITLE} Extension Successfully Loaded."
+      puts ""
+      
+      # Interactive utilities
+      def mod
+        return Sketchup.active_model # Open model
+      end
+      def ent
+        return Sketchup.active_model.entities # All entities in model
+      end
+      def sel 
+        return Sketchup.active_model.selection # Current selection
+      end
+    end
+
+  end # if file_loaded?
+
+end # module
+
+file_loaded(__FILE__)
 
 
 #def test

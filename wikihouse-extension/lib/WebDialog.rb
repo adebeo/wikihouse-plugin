@@ -21,7 +21,7 @@ module WikihouseExtension
     # Try and save the model/component directly into the current model.
     if model and is_comp == '1'
       reply = UI.messagebox "Load this directly into your Google SketchUp model?", MB_YESNOCANCEL
-      if reply == REPLY_YES
+      if reply == IDYES
         loader = WikiHouseLoader.new name
         blob_url = WIKIHOUSE_SERVER + blob_url
         model.definitions.load_from_url blob_url, loader
@@ -36,11 +36,11 @@ module WikihouseExtension
         else
           UI.messagebox loader.error
           reply = UI.messagebox "Would you like to save the model file instead?", MB_YESNO
-          if reply == REPLY_NO
+          if reply == IDNO
             return
           end
         end
-      elsif reply == REPLY_NO
+      elsif reply == IDNO
         # Skip through to saving the file directly.
       else
         return
@@ -115,7 +115,7 @@ module WikihouseExtension
     end
 
     reply = UI.messagebox "Successfully saved #{WIKIHOUSE_TITLE} model. Would you like to open it?", MB_YESNO
-    if reply == REPLY_YES
+    if reply == IDYES
       if not Sketchup.open_file filename
         show_wikihouse_error "Couldn't open #{filename}"
       end
@@ -244,7 +244,7 @@ module WikihouseExtension
 
       if File.size(model_path) > 12582912
         reply = UI.messagebox "The model file is larger than 12MB. Would you like to purge unused objects, materials and styles?", MB_OKCANCEL
-        if reply == REPLY_OK
+        if reply == IDOK
           model.layers.purge_unused
           model.styles.purge_unused
           model.materials.purge_unused

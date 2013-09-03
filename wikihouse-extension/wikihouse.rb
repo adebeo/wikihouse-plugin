@@ -1159,7 +1159,7 @@ module WikihouseExtension # Top Level Namespace
     if selection.empty?
       if interactive
         reply = UI.messagebox "No objects selected. Export the entire model?", MB_OKCANCEL
-        if reply != REPLY_OK
+        if reply != IDOK
           return
         end
       end

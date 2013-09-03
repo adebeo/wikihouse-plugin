@@ -53,14 +53,6 @@ module WikihouseExtension
     end
   end
   WIKIHOUSE_DUMMY_GROUP = WikiHouseDummyGroup.new
-
-  # UI Message Box codes 
-  REPLY_ABORT = 3
-  REPLY_CANCEL = 2
-  REPLY_NO = 7
-  REPLY_OK = 1
-  REPLY_RETRY = 4
-  REPLY_YES = 6
   
   def get_wikihouse_thumbnail(model, view, suffix)
     filename = File.join WIKIHOUSE_TEMP, "#{model.guid}-#{suffix}.png"

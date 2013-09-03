@@ -1177,42 +1177,51 @@ module WikihouseExtension # Top Level Namespace
       settings['padding'],
       settings['font_height']
     ]
-  
-    # Load and parse the entities.
-    if WIKIHOUSE_SHORT_CIRCUIT && @@wikloader # Converted from global. Could be instance?
-      loader = @@wikloader
-    else
-      loader = WikiHouseEntities.new entities, root, dimensions
-      if WIKIHOUSE_SHORT_CIRCUIT
-        @@wikloader = loader
+
+    model.start_operation('Make WikiHouse', true)
+    begin
+
+      # Load and parse the entities.
+      if WIKIHOUSE_SHORT_CIRCUIT && @@wikloader # Converted from global. Could be instance?
+        loader = @@wikloader
+      else
+        loader = WikiHouseEntities.new entities, root, dimensions
+        if WIKIHOUSE_SHORT_CIRCUIT
+          @@wikloader = loader
+        end
       end
-    end
-  
-    if interactive and loader.orphans
-      msg = "The cutting sheets may be incomplete. The following number of faces could not be matched appropriately:\n\n"
-      loader.orphans.each_pair do |group, count|
-        msg += "    #{count} in #{group.name.length > 0 and group.name or 'Group#???'}\n"
+    
+      if interactive and loader.orphans
+        msg = "The cutting sheets may be incomplete. The following number of faces could not be matched appropriately:\n\n"
+        loader.orphans.each_pair do |group, count|
+          msg += "    #{count} in #{group.name.length > 0 and group.name or 'Group#???'}\n"
+        end
+        UI.messagebox msg
       end
-      UI.messagebox msg
+    
+      # Filter out any panels which raised an error.
+      panels = loader.panels.select { |panel| !panel.error }
+    
+      # Run the detected panels through the layout engine.
+      layout = WikiHouseLayoutEngine.new panels, root, dimensions
+    
+      # Generate the SVG file.
+      svg = WikiHouseSVG.new layout, 8
+      svg_data = svg.generate
+    
+      # Generate the DXF file.
+      dxf = WikiHouseDXF.new layout
+      dxf_data = dxf.generate
+    
+      # Cleanup.
+      Sketchup.set_status_text ""
+      loader.purge
+
+    ensure
+      # This aborts all the temp operations performed during export. Leaving
+      # the Undo stack clean and model unchanged.
+      model.abort_operation
     end
-  
-    # Filter out any panels which raised an error.
-    panels = loader.panels.select { |panel| !panel.error }
-  
-    # Run the detected panels through the layout engine.
-    layout = WikiHouseLayoutEngine.new panels, root, dimensions
-  
-    # Generate the SVG file.
-    svg = WikiHouseSVG.new layout, 8
-    svg_data = svg.generate
-  
-    # Generate the DXF file.
-    dxf = WikiHouseDXF.new layout
-    dxf_data = dxf.generate
-  
-    # Cleanup.
-    Sketchup.set_status_text ""
-    loader.purge
   
     # Return the generated data.
     [svg_data, dxf_data]

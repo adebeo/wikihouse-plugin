@@ -395,7 +395,9 @@ module WikihouseExtension
     end
 
     # Initialise an attribute dictionary for custom metadata.
+    model.start_operation('Make WikiHouse')
     self.init_wikihouse_attributes()
+    model.commit_operation
   
     # Get the model's parent directory and generate the new filenames to save to.
     directory = File.dirname(model_path)

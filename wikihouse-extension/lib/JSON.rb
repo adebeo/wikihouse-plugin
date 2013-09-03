@@ -21,7 +21,7 @@ module WikihouseExtension
         join()
       result = eval(ruby_string)
       return result
-    rescue Exception => e
+    rescue StandardError => e
       {}
     end
   

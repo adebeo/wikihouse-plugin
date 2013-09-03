@@ -165,8 +165,11 @@ module WikihouseExtension
 
     # Set the dialog's url and display it.
     dialog.set_url WIKIHOUSE_DOWNLOAD_URL
-    dialog.show
-    dialog.show_modal
+    if WIKIHOUSE_MAC
+      dialog.show_modal
+    else
+      dialog.show
+    end
 
   end
 

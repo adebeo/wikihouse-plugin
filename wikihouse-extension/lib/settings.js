@@ -6,10 +6,12 @@ window.onerror = function (msg, url, line) {
    alert("Message : " + msg + "\n\nurl : " + url + "\n\nLine No: " + line);
 }
 
-window.onload = function() { fetch_settings('current') }
-// For some reason the page is loaded blank untill the window is refocused onto.
-window.blur()
-window.focus()
+//window.onload = function() { fetch_settings('current') }
+// For some reason the page is loaded blank until the window is refocused onto.
+// Because of this the event is added to a SCRIPT tag at the end of the HTML
+// file which will avoid the blank window. Migrating to jQuery and using the
+// .ready() would also avoid the error and clean up the code.
+
 
 // Define Globals
 var settings;

@@ -1,6 +1,6 @@
 require 'extensions.rb'
 
-module WikihouseExtension
+module WikiHouseExtension
   
   path = File.dirname(__FILE__)
   loader = File.join(path, 'wikihouse-extension', 'wikihouse.rb')

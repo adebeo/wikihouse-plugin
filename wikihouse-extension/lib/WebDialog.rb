@@ -1,6 +1,6 @@
 # Web Dialogues
 
-module WikihouseExtension
+module WikiHouseExtension
 
   # ------------------------------------------------------------------------------
   # Common Callbacks
@@ -56,8 +56,8 @@ module WikihouseExtension
 
     # TODO(tav): Ensure that this is atomic and free of thread-related
     # concurrency issues.
-    WikihouseExtension.downloads_id += 1
-    download_id = WikihouseExtension.downloads_id.to_s
+    WikiHouseExtension.downloads_id += 1
+    download_id = WikiHouseExtension.downloads_id.to_s
 
     WIKIHOUSE_DOWNLOADS[download_id] = filename
 
@@ -457,7 +457,7 @@ module WikihouseExtension
       if args == 'default'
         settings = DEFAULT_SETTINGS
       elsif args == 'current'
-        settings = WikihouseExtension.settings
+        settings = WikiHouseExtension.settings
       end
 
       if args == 'default' || args == 'current'
@@ -482,7 +482,7 @@ module WikihouseExtension
       end
 
       #      UI.messagebox("Passed Arguments = #{args}")
-      settings = WikihouseExtension.settings
+      settings = WikiHouseExtension.settings
       new_settings = JSON.from_json(args)
 
       for k,v in new_settings do

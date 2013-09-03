@@ -1,5 +1,5 @@
   
-module WikihouseExtension   
+module WikiHouseExtension   
 
    # ------------------------------------------------------------------------------
    # DXF Writer

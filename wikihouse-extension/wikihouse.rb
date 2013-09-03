@@ -12,7 +12,7 @@ Sketchup::require File.join(lib_path, 'core.rb')
 require_all(lib_path)
 
 
-module WikihouseExtension # Top Level Namespace
+module WikiHouseExtension # Top Level Namespace
 
   # ------------------------------------------------------------------------------
   # Layout Engine
@@ -877,10 +877,10 @@ module WikihouseExtension # Top Level Namespace
       groups = @groups
   
       # Setup the min/max heights for the depth edge/faces.
-      min_height = WikihouseExtension.settings["sheet_depth"] - 1.mm
-      max_height = WikihouseExtension.settings["sheet_depth"] + 1.mm
-#      min_height = 17.mm
-#      max_height = 19.mm
+      min_height = WikiHouseExtension.settings["sheet_depth"] - 1.mm
+      max_height = WikiHouseExtension.settings["sheet_depth"] + 1.mm
+      # min_height = 17.mm
+      # max_height = 19.mm
   
       # Apply the transformation if one has been set for this group.
       if group.transformation
@@ -1167,7 +1167,7 @@ module WikihouseExtension # Top Level Namespace
       entities = selection
     end
   
-    settings = WikihouseExtension.settings
+    settings = WikiHouseExtension.settings
     dimensions = [
       settings['sheet_height'],
       settings['sheet_width'],

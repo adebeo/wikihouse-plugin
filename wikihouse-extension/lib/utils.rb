@@ -1,5 +1,5 @@
 
-module WikihouseExtension
+module WikiHouseExtension
 
   # ------------------------------------------------------------------------------
   # Utility Functions and Constants
@@ -98,7 +98,7 @@ module WikihouseExtension
   end
   
   extend self
-  # Adds all instance methods previously defined here in a 'WikihouseExtension' namespace to  
+  # Adds all instance methods previously defined here in a 'WikiHouseExtension' namespace to  
   # the module itself, therfore allowing access to instance methods without the need to make a class first.
 
   # ------------------------------------------------------------------------------

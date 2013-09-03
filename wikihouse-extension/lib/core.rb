@@ -1,7 +1,7 @@
 lib_path = File.dirname(__FILE__)
 require File.join(lib_path, 'utils.rb')
 
-module WikihouseExtension
+module WikiHouseExtension
 
   # Run Flags
   WIKIHOUSE_DEV = true   # If true brings up Ruby Console and loads some utility functions on startup

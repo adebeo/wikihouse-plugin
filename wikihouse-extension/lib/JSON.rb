@@ -5,7 +5,7 @@
 # Source: http://sketchucation.com/forums/viewtopic.php?f=180&t=35969
 #
 
-module WikihouseExtension
+module WikiHouseExtension
   
   class JSON
   

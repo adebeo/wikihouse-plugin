@@ -311,8 +311,8 @@ module WikihouseExtension # Top Level Namespace
             available_area -= panel_area
             inner_faces.add_face(used[0].map { |p| t * p })
             outer_faces.add_face(used[1].map { |p| t * p })
-            placed_i = inner_faces.select { |e| e.typename == "Face" }
-            placed_o = outer_faces.select { |e| e.typename == "Face" }
+            placed_i = inner_faces.grep(Sketchup::Face)
+            placed_o = outer_faces.grep(Sketchup::Face)
   
             # Generate the new loop vertices.
             loops = panel.loops.map do |loop|
@@ -791,10 +791,10 @@ module WikihouseExtension # Top Level Namespace
         Sketchup.set_status_text WIKIHOUSE_DETECTION_STATUS[(loop/10) % 5] # Loop through status msg 
         loop += 1
         entity, transform = todo.pop
-        case entity.typename
-        when "Group", "ComponentInstance"
+        case entity
+        when Sketchup::Group, Sketchup::ComponentInstance
           visit entity, transform
-        when "Face" 
+        when Sketchup::Face
           if orphans[WIKIHOUSE_DUMMY_GROUP]
             orphans[WIKIHOUSE_DUMMY_GROUP] += 1
           else
@@ -894,8 +894,8 @@ module WikihouseExtension # Top Level Namespace
       end
   
       # Get the entities set.
-      case group.typename
-      when "Group"
+      case group
+      when Sketchup::Group
         entities = group.entities
       else # is component
         group = group.definition
@@ -905,8 +905,8 @@ module WikihouseExtension # Top Level Namespace
         if groups[group]
           groups[group] << [transform, label]
           entities.each do |entity|
-            case entity.typename
-            when "Group", "ComponentInstance"
+            case entity
+            when Sketchup::Group, Sketchup::ComponentInstance
               @todo << [entity, transform]
             end
           end
@@ -919,8 +919,8 @@ module WikihouseExtension # Top Level Namespace
   
       # Loop through the entities.
       entities.each do |entity|
-        case entity.typename
-        when "Face"
+        case entity
+        when Sketchup::Face
           edges = entity.edges
           ignore = 0
           # Ignore all faces which match the specification for the depth side.
@@ -942,7 +942,7 @@ module WikihouseExtension # Top Level Namespace
           if ignore != 2 # TODO(tav): and entity.visible?
             faces << entity
           end
-        when "Group", "ComponentInstance"
+        when Sketchup::Group, Sketchup::ComponentInstance
           # Append the entity to the todo attribute instead of recursively calling
           # ``visit`` so as to avoid blowing the stack.
           @todo << [entity, transform]

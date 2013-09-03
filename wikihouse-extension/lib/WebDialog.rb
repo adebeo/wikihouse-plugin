@@ -441,28 +441,24 @@ module WikihouseExtension
     dialog = UI::WebDialog.new WIKIHOUSE_TITLE, true, "#{WIKIHOUSE_TITLE}-Settings", 480, 660, 150, 150, true
 
     # Get Current Wikihouse Settings
-    dialog.add_action_callback("fetch_settings") { |d, args|
+    dialog.add_action_callback('fetch_settings') { |d, args|
 
-      if args == "default"
+      if args == 'default'
+        settings = DEFAULT_SETTINGS
+      elsif args == 'current'
+        settings = WikihouseExtension.settings
+      end
 
+      if args == 'default' || args == 'current'
         # Convert Dimenstions to mm
         dims = {}
-        for k, v in DEFAULT_SETTINGS do
+        for k, v in settings do
           dims[k] = v.to_mm
         end
-        script = "recieve_wikihouse_settings('" + JSON.to_json(dims) + "');"
-        d.execute_script(script)
-
-      elsif args == "current"
-
-        # Convert Dimenstions to mm
-        dims = {}
-        for k, v in WikihouseExtension.settings do
-          dims[k] = v.to_mm
-        end
-        script = "recieve_wikihouse_settings('" + JSON.to_json(dims) + "');"
+        script = "recieve_wikihouse_settings('#{JSON.to_json(dims)}');"
         d.execute_script(script)
       end
+
     }
 
     # Set Web Dialog's Callbacks

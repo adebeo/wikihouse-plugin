@@ -13,9 +13,6 @@ require_all(lib_path)
 
 
 module WikihouseExtension # Top Level Namespace
-  
-  module_function() # Makes all methods defined in the module callable via
-  #ModuleName.method. Else would have to define a class and mix them into it first.
 
   # ------------------------------------------------------------------------------
   # Layout Engine
@@ -1154,7 +1151,7 @@ module WikihouseExtension # Top Level Namespace
   # ------------------------------------------------------------------------------
   # Make This House
   # ------------------------------------------------------------------------------
-  def make_wikihouse(model, interactive)
+  def self.make_wikihouse(model, interactive)
   
     # Isolate the entities to export.
     entities = root = model.active_entities
@@ -1223,7 +1220,7 @@ module WikihouseExtension # Top Level Namespace
   end
 
 
-  def init_wikihouse_attributes
+  def self.init_wikihouse_attributes
     model = Sketchup.active_model
     dictionary = model.attribute_dictionary(WIKIHOUSE_TITLE, true)
     if dictionary.size == 0
@@ -1248,10 +1245,10 @@ module WikihouseExtension # Top Level Namespace
 
     # Initialise the core commands.
     WIKIHOUSE_DOWNLOAD = UI::Command.new "Get Models..." do
-      WikihouseExtension::load_wikihouse_download
+      selfload_wikihouse_download
     end
     
-    WIKIHOUSE_DOWNLOAD.tooltip = "Find new models to use at #{WikihouseExtension::WIKIHOUSE_TITLE}"
+    WIKIHOUSE_DOWNLOAD.tooltip = "Find new models to use at #{WIKIHOUSE_TITLE}"
     WIKIHOUSE_DOWNLOAD.small_icon = File.join WIKIHOUSE_ASSETS, "download-16.png"
     WIKIHOUSE_DOWNLOAD.large_icon = File.join WIKIHOUSE_ASSETS, "download.png"
 
@@ -1262,7 +1259,7 @@ module WikihouseExtension # Top Level Namespace
     }
 
     WIKIHOUSE_MAKE = UI::Command.new "Make This House..." do
-      WikihouseExtension::load_wikihouse_make
+      self.load_wikihouse_make
     end
 
     WIKIHOUSE_MAKE.tooltip = "Convert a model of a House into printable components"
@@ -1277,10 +1274,10 @@ module WikihouseExtension # Top Level Namespace
     }
     
     WIKIHOUSE_UPLOAD = UI::Command.new "Share Model..." do
-      WikihouseExtension::load_wikihouse_upload
+      self.load_wikihouse_upload
     end
 
-    WIKIHOUSE_UPLOAD.tooltip = "Upload and share your model at #{WikihouseExtension::WIKIHOUSE_TITLE}"
+    WIKIHOUSE_UPLOAD.tooltip = "Upload and share your model at #{WIKIHOUSE_TITLE}"
     WIKIHOUSE_UPLOAD.small_icon = File.join WIKIHOUSE_ASSETS, "upload-16.png"
     WIKIHOUSE_UPLOAD.large_icon = File.join WIKIHOUSE_ASSETS, "upload.png"
     WIKIHOUSE_UPLOAD.set_validation_proc {
@@ -1292,19 +1289,19 @@ module WikihouseExtension # Top Level Namespace
     }
     
     WIKIHOUSE_SETTINGS = UI::Command.new "Settings..." do
-    WikihouseExtension::load_wikihouse_settings
+      self.load_wikihouse_settings
     end
 
-    WIKIHOUSE_SETTINGS.tooltip = "Change #{WikihouseExtension::WIKIHOUSE_TITLE} settings"
+    WIKIHOUSE_SETTINGS.tooltip = "Change #{WIKIHOUSE_TITLE} settings"
     WIKIHOUSE_SETTINGS.small_icon = File.join WIKIHOUSE_ASSETS, "cog-16.png"
     WIKIHOUSE_SETTINGS.large_icon = File.join WIKIHOUSE_ASSETS, "cog.png"
     WIKIHOUSE_SETTINGS.set_validation_proc {
       MF_ENABLED
-      }
+    }
     
 
     # Register a new toolbar with the commands.
-    WIKIHOUSE_TOOLBAR = UI::Toolbar.new WikihouseExtension::WIKIHOUSE_TITLE
+    WIKIHOUSE_TOOLBAR = UI::Toolbar.new(WIKIHOUSE_TITLE)
     WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_DOWNLOAD
     WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_UPLOAD
     WIKIHOUSE_TOOLBAR.add_item WIKIHOUSE_MAKE
@@ -1312,26 +1309,24 @@ module WikihouseExtension # Top Level Namespace
     WIKIHOUSE_TOOLBAR.show
 
     # Register a new submenu of the standard Plugins menu with the commands.
-    WIKIHOUSE_MENU = UI.menu("Plugins").add_submenu WikihouseExtension::WIKIHOUSE_TITLE
+    WIKIHOUSE_MENU = UI.menu("Plugins").add_submenu(WIKIHOUSE_TITLE)
     WIKIHOUSE_MENU.add_item WIKIHOUSE_DOWNLOAD
     WIKIHOUSE_MENU.add_item WIKIHOUSE_UPLOAD
     WIKIHOUSE_MENU.add_item WIKIHOUSE_MAKE
     WIKIHOUSE_MENU.add_item WIKIHOUSE_SETTINGS
 
     # Add our custom AppObserver.
-    Sketchup.add_observer WikihouseExtension::WikiHouseAppObserver.new
+    Sketchup.add_observer(WikiHouseAppObserver.new)
 
     # Display the Ruby Console in dev mode.
-    if WikihouseExtension::WIKIHOUSE_DEV
+    if WIKIHOUSE_DEV
       Sketchup.send_action "showRubyPanel:"
-      
-      WE = WikihouseExtension
       
       def w
         load "wikihouse.rb"
       end
       puts ""
-      puts "#{WikihouseExtension::WIKIHOUSE_TITLE} Extension Successfully Loaded."
+      puts "#{WIKIHOUSE_TITLE} Extension Successfully Loaded."
       puts ""
       
       # Interactive utilities

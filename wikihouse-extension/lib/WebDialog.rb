@@ -2,16 +2,13 @@
 
 module WikihouseExtension
 
-  module_function() # Makes all methods defined in the module callable via
-  #ModuleName.method. Else would have to define a class and mix them into it first.
-
   # ------------------------------------------------------------------------------
   # Common Callbacks
   # ------------------------------------------------------------------------------
   
   # Download Callback
   # -----------------
-  def wikihouse_download_callback(dialog, params)
+  def self.wikihouse_download_callback(dialog, params)
     # Exit if the download parameters weren't set.
     if params == ""
       show_wikihouse_error "Couldn't find the #{WIKIHOUSE_TITLE} model name and url"
@@ -70,7 +67,7 @@ module WikihouseExtension
 
   # Save Callback
   # -------------
-  def wikihouse_save_callback(dialog, download_id)
+  def self.wikihouse_save_callback(dialog, download_id)
     errmsg = "Couldn't find the #{WIKIHOUSE_TITLE} model data to save"
 
     # Exit if the save parameters weren't set.
@@ -127,7 +124,7 @@ module WikihouseExtension
 
   # Error Callback
   # --------------
-  def wikihouse_error_callback(dialog, download_id)
+  def self.wikihouse_error_callback(dialog, download_id)
     if not WIKIHOUSE_DOWNLOADS.key? download_id
       return
     end
@@ -141,7 +138,7 @@ module WikihouseExtension
   # ------------------------------------------------------------------------------
   # Download Web Dialogue
   # ------------------------------------------------------------------------------
-  def load_wikihouse_download
+  def self.load_wikihouse_download
 
     # Exit if the computer is not online.
     if not Sketchup.is_online
@@ -152,15 +149,15 @@ module WikihouseExtension
     dialog = UI::WebDialog.new WIKIHOUSE_TITLE, true, "#{WIKIHOUSE_TITLE}-Download", 480, 640, 150, 150, true
 
     dialog.add_action_callback("download") { |dialog, params|
-      wikihouse_download_callback(dialog, params)
+      self.wikihouse_download_callback(dialog, params)
     }
 
     dialog.add_action_callback("save") { |dialog, download_id|
-      wikihouse_save_callback(dialog, download_id)
+      self.wikihouse_save_callback(dialog, download_id)
     }
 
     dialog.add_action_callback("error") { |dialog, download_id|
-      wikihouse_error_callback(dialog, download_id)
+      self.wikihouse_error_callback(dialog, download_id)
     }
 
     # Set the dialog's url and display it.
@@ -177,7 +174,7 @@ module WikihouseExtension
   # Upload Web Dialogue
   # ------------------------------------------------------------------------------
 
-  def load_wikihouse_upload
+  def self.load_wikihouse_upload
 
     # Exit if the computer is not online.
     if not Sketchup.is_online
@@ -201,7 +198,7 @@ module WikihouseExtension
     end
 
     # Initialise an attribute dictionary for custom metadata.
-    init_wikihouse_attributes()
+    self.init_wikihouse_attributes()
 
     # Auto-save the model if it has been modified.
     if model.modified?
@@ -313,7 +310,7 @@ module WikihouseExtension
       camera.set eye, target, up
 
       # Get the generated sheets data.
-      sheets_data = make_wikihouse model, false
+      sheets_data = self.make_wikihouse(model, false)
       if not sheets_data
         svg_data, dxf_data = "", ""
       else
@@ -342,15 +339,15 @@ module WikihouseExtension
     end
 
     dialog.add_action_callback "download" do |dialog, params|
-      wikihouse_download_callback dialog, params
+      self.wikihouse_download_callback dialog, params
     end
 
     dialog.add_action_callback "save" do |dialog, download_id|
-      wikihouse_save_callback dialog, download_id
+      self.wikihouse_save_callback dialog, download_id
     end
 
     dialog.add_action_callback "error" do |dialog, download_id|
-      wikihouse_error_callback dialog, download_id
+      self.wikihouse_error_callback dialog, download_id
     end
 
     # TODO(tav): There can be a situation where the dialog has been closed, but
@@ -374,7 +371,7 @@ module WikihouseExtension
   # Make Web Dialog
   # ------------------------------------------------------------------------------
 
-  def load_wikihouse_make
+  def self.load_wikihouse_make
   
     model = Sketchup.active_model
   
@@ -398,7 +395,7 @@ module WikihouseExtension
     end
 
     # Initialise an attribute dictionary for custom metadata.
-    init_wikihouse_attributes()
+    self.init_wikihouse_attributes()
   
     # Get the model's parent directory and generate the new filenames to save to.
     directory = File.dirname(model_path)
@@ -406,7 +403,7 @@ module WikihouseExtension
     dxf_filename = File.join(directory, filename + ".dxf")
   
     # Make the cutting sheets for the house!
-    data = make_wikihouse model, true
+    data = self.make_wikihouse(model, true)
     if not data
       return
     end
@@ -438,7 +435,7 @@ module WikihouseExtension
   # Settings Web Dialogue
   # ------------------------------------------------------------------------------
 
-  def load_wikihouse_settings
+  def self.load_wikihouse_settings
 
     # Create WebDialog
     dialog = UI::WebDialog.new WIKIHOUSE_TITLE, true, "#{WIKIHOUSE_TITLE}-Settings", 480, 660, 150, 150, true

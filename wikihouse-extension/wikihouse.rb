@@ -1223,6 +1223,15 @@ module WikihouseExtension # Top Level Namespace
   end
 
 
+  def init_wikihouse_attributes
+    model = Sketchup.active_model
+    dictionary = model.attribute_dictionary(WIKIHOUSE_TITLE, true)
+    if dictionary.size == 0
+      dictionary['spec'] = EXTENSION.version
+    end
+  end
+
+
   unless file_loaded?(__FILE__)
 
     WIKIHOUSE_ASSETS = File.join(File.dirname(__FILE__), 'wikihouse-assets')

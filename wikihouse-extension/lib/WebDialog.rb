@@ -193,18 +193,15 @@ module WikihouseExtension
       return
     end
 
-    # Initialise an attribute dictionary for custom metadata.
-    attr = model.attribute_dictionary WIKIHOUSE_TITLE, true
-    if attr.size == 0
-      attr["spec"] = "0.1"
-    end
-
     # Exit if it's an unsaved model.
     model_path = model.path
     if model_path == ""
       UI.messagebox "You need to save the model before it can be shared at #{WIKIHOUSE_TITLE}"
       return
     end
+
+    # Initialise an attribute dictionary for custom metadata.
+    init_wikihouse_attributes()
 
     # Auto-save the model if it has been modified.
     if model.modified?
@@ -386,12 +383,6 @@ module WikihouseExtension
       show_wikihouse_error "You need to open a SketchUp model before it can be fabricated"
       return
     end
-    
-    # Initialise an attribute dictionary for custom metadata.
-    attr = model.attribute_dictionary WIKIHOUSE_TITLE, true
-    if attr.size == 0
-      attr["spec"] = EXTENSION.version
-    end
   
     # Exit if it's an unsaved model.
     model_path = model.path
@@ -405,6 +396,9 @@ module WikihouseExtension
     if filename == ""
       filename = "Untitled"
     end
+
+    # Initialise an attribute dictionary for custom metadata.
+    init_wikihouse_attributes()
   
     # Get the model's parent directory and generate the new filenames to save to.
     directory = File.dirname(model_path)

@@ -114,12 +114,18 @@ module WikihouseExtension
   
     # TODO(tav): This doesn't seem to be getting called.
     # (Chris) Should do now I think. Still need to test.
+    #
+    # (thomthom) Displaying modal windows, or any window, during the shutdown
+    # sequence might cause problems. Avoid doing that. Until the purpose of the
+    # message is known I leave them uncommented and output to console.
     def onQuit
       if WIKIHOUSE_DOWNLOADS.length > 0
-        show_wikihouse_error "Aborting downloads from #{WIKIHOUSE_TITLE}"
+        #show_wikihouse_error "Aborting downloads from #{WIKIHOUSE_TITLE}"
+        puts "Aborting downloads from #{WIKIHOUSE_TITLE}"
       end
       if WIKIHOUSE_UPLOADS.length > 0
-        show_wikihouse_error "Aborting uploads to #{WIKIHOUSE_TITLE}"
+        #show_wikihouse_error "Aborting uploads to #{WIKIHOUSE_TITLE}"
+        puts "Aborting uploads to #{WIKIHOUSE_TITLE}"
       end
     end 
   end

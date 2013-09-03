@@ -7,7 +7,7 @@ module WikihouseExtension
   # Define and Load the wikihouse Extension 
   title = 'Wikihouse Plugin Development Version'
   EXTENSION = SketchupExtension.new(title, loader)
-  EXTENSION.version     = '0.3 Dev'
+  EXTENSION.version     = '0.3.0'
   EXTENSION.copyright   = 'Public Domain - 2013'
   EXTENSION.creator     = 'Wikihouse Development Team'
   EXTENSION.description = 'Allows for the sharing and downloading of ' <<

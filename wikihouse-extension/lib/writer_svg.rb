@@ -1,36 +1,6 @@
-  
 module WikiHouseExtension   
 
-   # ------------------------------------------------------------------------------
-   # DXF Writer
-   # ------------------------------------------------------------------------------
-   
-   class WikiHouseDXF
-   
-     def initialize(layout)
-     end
-   
-     def generate
-       ""
-     end
-   
-   end
-   
-   # ------------------------------------------------------------------------------
-   # SVG Writer
-   # ------------------------------------------------------------------------------
-   
-  class WikiHouseSVG
-    
-    # May reformat with multiline string in this format:
-    #   string = "line #1"\
-    #            "line #2"\
-    #            "line #3"
-  
-    def initialize(layout, scale)
-      @layout = layout
-      @scale = scale
-    end
+  class SVG_Writer < Writer
   
     def generate
   
@@ -135,6 +105,6 @@ module WikiHouseExtension
   
     end
   
-  end
+  end # class
 
-end
+end # module

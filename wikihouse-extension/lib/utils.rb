@@ -1,4 +1,3 @@
-
 module WikiHouseExtension
 
   # ------------------------------------------------------------------------------
@@ -72,7 +71,7 @@ module WikiHouseExtension
     data
   end
   
-  def get_dom_value(dialog, id, value)
+  def set_dom_value(dialog, id, value)
     if value.length > 2097152
       dialog.execute_script "WIKIHOUSE_DATA = [#{value[0...2097152].inspect}];"
       start, stop = 2097152, (2097152+2097152)

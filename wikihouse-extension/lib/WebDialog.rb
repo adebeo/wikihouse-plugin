@@ -236,7 +236,7 @@ module WikiHouseExtension
       if Sketchup.version
         set_dom_value dialog, "design-sketchup-version", Sketchup.version
       end
-      set_dom_value dialog, "design-plugin-version", WIKIHOUSE_PLUGIN_VERSION
+      set_dom_value dialog, "design-plugin-version", EXTENSION.version
     }
 
     # Process Callback

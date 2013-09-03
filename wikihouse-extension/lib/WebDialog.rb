@@ -508,7 +508,7 @@ module WikiHouseExtension
       d.close }
 
     # Set HTML
-    html_path = File.join(LIB_PATH, 'settings.html')
+    html_path = File.join(WEBDIALOG_PATH, 'settings.html')
     dialog.set_file(html_path)
     if WIKIHOUSE_MAC
       dialog.show_modal

@@ -146,7 +146,8 @@ module WikihouseExtension
       return
     end
 
-    dialog = UI::WebDialog.new WIKIHOUSE_TITLE, true, "#{WIKIHOUSE_TITLE}-Download", 480, 640, 150, 150, true
+    dialog = UI::WebDialog.new("#{WIKIHOUSE_TITLE} - Download",
+      true, "#{WIKIHOUSE_TITLE}-Download", 480, 640, 150, 150, true)
 
     dialog.add_action_callback("download") { |dialog, params|
       self.wikihouse_download_callback(dialog, params)
@@ -215,7 +216,8 @@ module WikihouseExtension
     end
 
     # Instantiate an upload web dialog.
-    dialog = UI::WebDialog.new WIKIHOUSE_TITLE, true, "#{WIKIHOUSE_TITLE}-Upload", 480, 640, 150, 150, true
+    dialog = UI::WebDialog.new("#{WIKIHOUSE_TITLE} - Upload",
+      true, "#{WIKIHOUSE_TITLE}-Upload", 480, 640, 150, 150, true)
 
     # Load Callback
     # -------------
@@ -431,7 +433,8 @@ module WikihouseExtension
       # (thomthom) I assume this is due to older IE versions not supporting SVG?
       # Newer version should support it so it'd be better to add a check in the
       # webdialog and display a message to users of older IE versions.
-      dialog = UI::WebDialog.new "Cutting Sheets Preview", true, "#{WIKIHOUSE_TITLE}-Preview", 800, 800, 150, 150, true
+      dialog = UI::WebDialog.new("Cutting Sheets Preview",
+        true, "#{WIKIHOUSE_TITLE}-Preview", 800, 800, 150, 150, true)
       dialog.set_file svg_filename
       dialog.show_modal
     end
@@ -445,9 +448,10 @@ module WikihouseExtension
   def self.load_wikihouse_settings
 
     # Create WebDialog
-    dialog = UI::WebDialog.new WIKIHOUSE_TITLE, true, "#{WIKIHOUSE_TITLE}-Settings", 480, 660, 150, 150, true
+    dialog = UI::WebDialog.new("#{WIKIHOUSE_TITLE} - Settings",
+      true, "#{WIKIHOUSE_TITLE}-Settings", 480, 600, 150, 150, true)
 
-    # Get Current Wikihouse Settings
+    # Get Current WikiHouse Settings
     dialog.add_action_callback('fetch_settings') { |d, args|
 
       if args == 'default'

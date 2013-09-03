@@ -10,7 +10,7 @@ module WikihouseExtension
   WIKIHOUSE_SHORT_CIRCUIT = false
 
   # Some Global Constants
-  WIKIHOUSE_TITLE = 'Wikihouse' # name of Wikihouse project, incase it changes.
+  WIKIHOUSE_TITLE = 'WikiHouse'
   # Panel stuff
   PANEL_ID_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
   PANEL_ID_ALPHABET_LENGTH = PANEL_ID_ALPHABET.length

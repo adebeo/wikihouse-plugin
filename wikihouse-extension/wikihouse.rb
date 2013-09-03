@@ -1254,7 +1254,7 @@ module WikihouseExtension # Top Level Namespace
 
     # Initialise the core commands.
     WIKIHOUSE_DOWNLOAD = UI::Command.new "Get Models..." do
-      selfload_wikihouse_download
+      self.load_wikihouse_download
     end
     
     WIKIHOUSE_DOWNLOAD.tooltip = "Find new models to use at #{WIKIHOUSE_TITLE}"

@@ -1,0 +1,64 @@
+html {
+	color: #333;
+	background: #fff;
+
+	font-family: 'Karla', 'Helvetica', 'report', sans-serif;
+  font-size: 0.75em;
+}
+
+body {
+  padding: 0 1em;
+}
+
+
+h1 {
+  font-size: 2em;
+}
+
+
+label b {
+  text-align: right;
+  display: inline-block;
+  width: 10em;
+}
+
+
+button {
+  width: 6em;
+  height: 2em;
+}
+
+
+.section {
+  padding: 1em 0 0 0;
+  margin: 1em 0;
+  border-top: 1px dotted #999;
+}
+
+.section p {
+  color: #999;
+  padding-left: 10.5em;
+  position: relative;
+}
+
+
+.footer {
+  padding: 1em 0;
+  margin: 1em 0;
+  border-top: 1px dotted #999;
+  border-bottom: 1px dotted #999;
+  position: relative;
+}
+
+#btnApply {
+  margin-right: 1em;
+}
+
+.right {
+  float: right;
+}
+
+.note {
+  color: #999;
+  padding: 0 1em;
+}

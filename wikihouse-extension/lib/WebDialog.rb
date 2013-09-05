@@ -430,14 +430,13 @@ module WikiHouseExtension
   
     UI.messagebox "Cutting sheets successfully saved to #{directory}", MB_OK
   
+    dialog = UI::WebDialog.new("Cutting Sheets Preview",
+      true, "#{WIKIHOUSE_TITLE}-Preview", 800, 800, 150, 150, true)
+    dialog.set_file svg_filename
     if WIKIHOUSE_MAC
-      # (thomthom) I assume this is due to older IE versions not supporting SVG?
-      # Newer version should support it so it'd be better to add a check in the
-      # webdialog and display a message to users of older IE versions.
-      dialog = UI::WebDialog.new("Cutting Sheets Preview",
-        true, "#{WIKIHOUSE_TITLE}-Preview", 800, 800, 150, 150, true)
-      dialog.set_file svg_filename
       dialog.show_modal
+    else
+      dialog.show
     end
   
   end

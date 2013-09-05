@@ -199,7 +199,9 @@ module WikiHouseExtension
     end
 
     # Initialise an attribute dictionary for custom metadata.
+    model.start_operation('Upload WikiHouse')
     self.init_wikihouse_attributes()
+    model.commit_operation
 
     # Auto-save the model if it has been modified.
     if model.modified?

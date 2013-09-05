@@ -203,7 +203,7 @@ module WikiHouseExtension
 
     # Auto-save the model if it has been modified.
     if model.modified?
-      if not model.save model_path
+      if not self.save_model(model)
         show_wikihouse_error "Couldn't auto-save the model to #{model_path}"
         return
       end
@@ -244,6 +244,7 @@ module WikiHouseExtension
     # Process and prepare the model related data for upload.
     dialog.add_action_callback("process") { |dialog, params|
 
+      # (?) Shouldn't the callback fetch the model filename again?
       if File.size(model_path) > 12582912
         reply = UI.messagebox "The model file is larger than 12MB. Would you like to purge unused objects, materials and styles?", MB_OKCANCEL
         if reply == IDOK
@@ -251,7 +252,7 @@ module WikiHouseExtension
           model.styles.purge_unused
           model.materials.purge_unused
           model.definitions.purge_unused
-          if not model.save model_path
+          if not self.save_model(model)
             show_wikihouse_error "Couldn't save the purged model to #{model_path}"
             dialog.close
             return

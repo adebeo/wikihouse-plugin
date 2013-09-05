@@ -3,6 +3,17 @@ module WikiHouseExtension
   # ------------------------------------------------------------------------------
   # Utility Functions and Constants
   # ------------------------------------------------------------------------------
+
+  def self.save_model(model)
+    if Sketchup.version.split('.').first < 14
+      # Prior to SketchUp 2014 model.save worked more like Save Copy As and
+      # would silently fail if you tried to save over the currently open model.
+      # (?) OSX seem to save, but still think the model is changed afterwards.
+      Sketchup.send_action('saveDocument:')
+    else
+      model.save
+    end
+  end
      
   # Path Utilities
   def get_documents_directory(home, docs)

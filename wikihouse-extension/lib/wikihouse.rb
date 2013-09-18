@@ -59,8 +59,8 @@ module WikiHouseExtension
       svg_data = svg.generate
     
       # Generate the DXF file.
-      dxf = DXF_Writer.new(layout)
-      dxf_data = dxf.generate
+      #dxf = DXF_Writer.new(layout)
+      #dxf_data = dxf.generate
     
       # Cleanup.
       Sketchup.set_status_text ""

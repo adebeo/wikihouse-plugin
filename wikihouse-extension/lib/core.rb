@@ -3,7 +3,7 @@ module WikiHouseExtension
   # ----------------------------------------------------------------------------
   # Development Configuration
 
-  WIKIHOUSE_DEV   = true
+  WIKIHOUSE_DEV   = false
   WIKIHOUSE_LOCAL = false 
   WIKIHOUSE_HIDE  = false  
   WIKIHOUSE_SHORT_CIRCUIT = false

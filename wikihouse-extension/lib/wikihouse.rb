@@ -58,10 +58,6 @@ module WikiHouseExtension
       svg = SVG_Writer.new(layout, 8)
       svg_data = svg.generate
     
-      # Generate the DXF file.
-      #dxf = DXF_Writer.new(layout)
-      #dxf_data = dxf.generate
-    
       # Cleanup.
       Sketchup.set_status_text ""
       loader.purge
@@ -73,7 +69,7 @@ module WikiHouseExtension
     end
   
     # Return the generated data.
-    [svg_data, dxf_data]
+    svg_data
   
   end
 

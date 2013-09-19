@@ -315,15 +315,11 @@ module WikiHouseExtension
       camera.set eye, target, up
 
       # Get the generated sheets data.
-      sheets_data = self.make_wikihouse(model, false)
-      if not sheets_data
-        svg_data, dxf_data = "", ""
-      else
-        svg_data = [sheets_data[0]].pack('m')
-        dxf_data = [sheets_data[1]].pack('m')
+      svg_data = self.make_wikihouse(model, false)
+      if not svg_data
+        return
       end
-
-      set_dom_value dialog, "design-sheets", dxf_data
+    
       set_dom_value dialog, "design-sheets-preview", svg_data
 
       WIKIHOUSE_UPLOADS[dialog] = 1
@@ -410,24 +406,16 @@ module WikiHouseExtension
     # Get the model's parent directory and generate the new filenames to save to.
     directory = File.dirname(model_path)
     svg_filename = File.join(directory, filename + ".svg")
-    dxf_filename = File.join(directory, filename + ".dxf")
   
     # Make the cutting sheets for the house!
-    data = self.make_wikihouse(model, true)
-    if not data
+    svg_data = self.make_wikihouse(model, true)
+    if not svg_data
       return
     end
-  
-    svg_data, dxf_data = data
-  
+
     # Save the SVG data to the file.
     File.open(svg_filename, "wb") do |io|
       io.write svg_data
-    end
-  
-    # Save the DXF data to the file.
-    File.open(dxf_filename, "wb") do |io|
-      io.write dxf_data
     end
   
     UI.messagebox "Cutting sheets successfully saved to #{directory}", MB_OK

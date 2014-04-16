@@ -53,6 +53,11 @@ module WikiHouseExtension
     
       # Run the detected panels through the layout engine.
       layout = WikiHouseLayoutEngine.new panels, root, dimensions
+
+
+      # Generate the DXF file.
+      dxf = DXF_Writer.new(layout, 8)
+      dxf_data = dxf.generate
     
       # Generate the SVG file.
       svg = SVG_Writer.new(layout, 8)
@@ -69,7 +74,7 @@ module WikiHouseExtension
     end
   
     # Return the generated data.
-    svg_data
+    [dxf_data, svg_data]
   
   end
 
